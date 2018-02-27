@@ -9,6 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "busboy": "^0.2.14",
     "debug": "^2.6.3",
     "fs": "0.0.1-security",
@@ -20,7 +21,6 @@
     "koa-onerror": "^1.2.1",
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
-    "koa-views": "^5.2.1",
     "koa2-cors": "^2.0.3",
     "koa2-file-server": "0.0.3",
     "mongoose": "^4.11.7",
