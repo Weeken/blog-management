@@ -23,6 +23,7 @@ const options = {
 const index = require('./routes/index')
 const users = require('./routes/users')
 const memos = require('./routes/memos')
+const notes = require('./routes/notes')
 
 // error handler
 onerror(app)
@@ -48,5 +49,6 @@ app.use(async (ctx, next) => {
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(memos.routes(), memos.allowedMethods())
+app.use(notes.routes(), notes.allowedMethods())
 
 module.exports = app
