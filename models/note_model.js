@@ -8,6 +8,7 @@ const NoteSchema = new mongoose.Schema({
     abstract: { type: String, default: "" },
     content: { type: String, default: "" },
     like: { type: Number, default: 0 },
+    likeUserId: { type: Array, default: [] },
     comment: { type: Number, default: 0 },
     read: { type: Number, default: 0 },
     time: { type: Date, default: Date.now }

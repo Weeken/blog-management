@@ -20,7 +20,19 @@ const NoteController = {
       ctx.body = {
         code: 200,
         message: 'ok',
-        data: data,
+        data: data.map(item => {
+          return {
+            _id: item._id,
+            tag: item.tag,
+            title: item.title,
+            read: item.read,
+            like: item.like,
+            likeUserId: item.likeUserId,
+            comment: item.comment,
+            abstract: item.abstract,
+            time: item.time
+          }
+        }),
         pageCount: pageCount
       }
     }
@@ -45,11 +57,14 @@ const NoteController = {
   },
   // 笔记详情
   async noteDetails (ctx, next) {
-    let res = await NoteModel.findById(ctx.params.id)
+    let note = await NoteModel.findById(ctx.params.id)
+    let readNum = note.read
+    let update = { read: readNum + 1 } // 增加浏览次数
+    let newNote = await NoteModel.findByIdAndUpdate(ctx.params.id, update, {new: true})
     ctx.body = {
       code: 200,
       message: 'ok',
-      data: res
+      data: newNote
     }
   },
   // 更新笔记

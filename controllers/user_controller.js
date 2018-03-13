@@ -1,4 +1,5 @@
 const UserModel = require('../models/user_model')
+const jwt = require('jsonwebtoken')
 
 const CtxHandler = ctx => {
   if (ctx.body === null || ctx.body.length <= 0) {
@@ -13,6 +14,13 @@ const CtxHandler = ctx => {
   }
 }
 
+const createToken = async user => {
+  let userToken = {name: user.name}
+  let secret = user._id.toString()
+  let token = await jwt.sign(userToken, secret, {expiresIn: '1h'})
+  return token
+}
+
 const UserController = {
   // 所有用户
   async allUsers (ctx, next) {
@@ -21,8 +29,46 @@ const UserController = {
   },
   // 搜索用户
   async findUser (ctx, next) {
-    ctx.body = await UserModel.find(ctx.query)
+    ctx.body = await UserModel.find(ctx.request.query)
     CtxHandler(ctx)
+  },
+  async userDetails (ctx, next) {
+    let user = await UserModel.findById(ctx.params.id)
+    if (!user) {
+      ctx.status = 401
+      ctx.body = { message: '找不到用户' }
+    } else {
+      ctx.status = 200
+      ctx.body = {
+        code: 200,
+        message: '注册成功',
+        data: {
+          email: user.email,
+          name: user.name,
+          type: user.type,
+          time: user.time
+        }
+      }
+    }
+  },
+  // 修改密码
+  async resetPassword (ctx, next) {
+    let update = {
+      password: ctx.request.body.newPassword
+    }
+    let user = await UserModel.findById(ctx.params.id)
+    if (user.password === ctx.request.body.oldPassword) {
+      let res = await UserModel.findByIdAndUpdate(ctx.params.id, update, {new: true})
+      ctx.body = {
+        code: 200,
+        message: '修改成功'
+      }
+    } else {
+      ctx.status = 401
+      ctx.body = {
+        message: '原密码错误'
+      }
+    }
   },
   // 注册
   async register (ctx, next) {
@@ -32,10 +78,16 @@ const UserController = {
       ctx.body = { message: '该邮箱已被注册' }
     } else {
       ctx.status = 200
+      let res = await UserModel.create(ctx.request.body)
       ctx.body = {
         code: 200,
         message: '注册成功',
-        data: await UserModel.create(ctx.request.body)
+        data: {
+          email: res.email,
+          name: res.name,
+          type: res.type,
+          time: res.time
+        }
       }
     }
   },
@@ -51,7 +103,13 @@ const UserController = {
         ctx.body = {
           code: 200,
           message: '登录成功',
-          data: exist
+          data: {
+            id: exist._id,
+            email: exist.email,
+            name: exist.name,
+            type: exist.type,
+            token: await createToken(exist)
+          }
         }
       }
     } else {

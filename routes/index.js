@@ -26,7 +26,7 @@ function uptoken(bucket, key) {
   return putPolicy.uploadToken(mac)
 }
 
-router.get('/token', async (ctx, next) => {
+router.get('/v1/token', async (ctx, next) => {
   ctx.body = {
     token: uptoken(bucket, key)
   }
