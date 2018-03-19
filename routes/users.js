@@ -11,6 +11,8 @@ router.get('/findUser', checkToken, UserController.findUser)
 
 router.get('/userDetails/:id', checkToken, UserController.userDetails)
 
+router.put('/changeAvatar/:id', checkToken, UserController.changeAvatar)
+
 router.put('/resetPassword/:id', checkToken, UserController.resetPassword)
 
 router.post('/login', UserController.login)

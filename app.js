@@ -27,6 +27,8 @@ const users = require('./routes/users')
 const memos = require('./routes/memos')
 const notes = require('./routes/notes')
 const like = require('./routes/like')
+const comments = require('./routes/comments')
+const replies = require('./routes/replies')
 
 // error handler
 onerror(app)
@@ -67,6 +69,8 @@ app.use(users.routes(), users.allowedMethods())
 app.use(memos.routes(), memos.allowedMethods())
 app.use(notes.routes(), notes.allowedMethods())
 app.use(like.routes(), like.allowedMethods())
+app.use(comments.routes(), comments.allowedMethods())
+app.use(replies.routes(), replies.allowedMethods())
 
 app.use(async (ctx, next) => {
   await next()

@@ -30,7 +30,7 @@ const LikeController = {
     }
     let update = {
       like: likeNum - 1,
-      isLiked: isLike
+      likeUserId: likeUserId
     } // 减少浏览次数
     await LikeModel.remove(ctx.request.body)
     await NoteModel.findByIdAndUpdate(ctx.request.body.noteId, update, {new: true})

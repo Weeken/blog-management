@@ -43,6 +43,8 @@ const UserController = {
         code: 200,
         message: '注册成功',
         data: {
+          id: user._id,
+          avatar: user.avatar,
           email: user.email,
           name: user.name,
           type: user.type,
@@ -70,6 +72,23 @@ const UserController = {
       }
     }
   },
+  // 修改头像
+  async changeAvatar (ctx, next) {
+    try {
+      let url = ctx.request.body.src + `?imageMogr2/crop/!${ctx.request.body.imageOptions.w}x${ctx.request.body.imageOptions.h}a${ctx.request.body.imageOptions.x}a${ctx.request.body.imageOptions.y}`
+      let update = {
+        avatar: url
+      }
+      let user = await UserModel.findById(ctx.params.id)
+      let res = await UserModel.findByIdAndUpdate(ctx.params.id, update, {new: true})
+      ctx.body = {
+        code: 200,
+        message: '修改成功'
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
   // 注册
   async register (ctx, next) {
     let exist = await UserModel.findOne({email: ctx.request.body.email})
@@ -86,6 +105,7 @@ const UserController = {
           email: res.email,
           name: res.name,
           type: res.type,
+          avatar: res.avatar,
           time: res.time
         }
       }
@@ -108,6 +128,7 @@ const UserController = {
             email: exist.email,
             name: exist.name,
             type: exist.type,
+            avatar: exist.avatar,
             token: await createToken(exist)
           }
         }

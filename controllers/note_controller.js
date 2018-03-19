@@ -1,4 +1,6 @@
 const NoteModel = require('../models/note_model')
+const CommentModel = require('../models/comment_model')
+const UserModel = require('../models/user_model')
 
 const NoteController = {
   // 所有笔记
@@ -28,7 +30,8 @@ const NoteController = {
             read: item.read,
             like: item.like,
             likeUserId: item.likeUserId,
-            comment: item.comment,
+            comments: item.comments,
+            commentList: item.commentList,
             abstract: item.abstract,
             time: item.time
           }
