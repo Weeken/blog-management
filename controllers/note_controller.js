@@ -5,48 +5,56 @@ const UserModel = require('../models/user_model')
 const NoteController = {
   // 所有笔记
   async allNotes (ctx, next) {
-    let limit = 10
-    let page = ctx.request.query.page || 1
-    let count = await NoteModel.count()
-    let pageCount
-    if (count <= limit) {
-      pageCount = 1
-    } else {
-      pageCount = count % limit === 0 ? ~~(count / limit) : ~~(count / limit + 1)
-    }
-    let data = await NoteModel.find({}, null, {skip: (page - 1) * limit, limit: limit, sort: {time: -1}})
-    if (data === null) {
-      ctx.status = 404
-      ctx.body = { message: '找不到笔记' }
-    } else {
-      ctx.body = {
-        code: 200,
-        message: 'ok',
-        data: data.map(item => {
-          return {
-            _id: item._id,
-            tag: item.tag,
-            title: item.title,
-            read: item.read,
-            like: item.like,
-            likeUserId: item.likeUserId,
-            comments: item.comments,
-            commentList: item.commentList,
-            abstract: item.abstract,
-            time: item.time
-          }
-        }),
-        pageCount: pageCount
+    try {
+      let limit = 10
+      let page = ctx.request.query.page || 1
+      let count = await NoteModel.count()
+      let pageCount
+      if (count <= limit) {
+        pageCount = 1
+      } else {
+        pageCount = count % limit === 0 ? ~~(count / limit) : ~~(count / limit + 1)
       }
+      let data = await NoteModel.find({}, null, {skip: (page - 1) * limit, limit: limit, sort: {time: -1}})
+      if (data === null) {
+        ctx.status = 404
+        ctx.body = { message: '找不到笔记' }
+      } else {
+        ctx.body = {
+          code: 200,
+          message: 'ok',
+          data: data.map(item => {
+            return {
+              _id: item._id,
+              tag: item.tag,
+              title: item.title,
+              read: item.read,
+              like: item.like,
+              likeUserId: item.likeUserId,
+              comments: item.comments,
+              commentList: item.commentList,
+              abstract: item.abstract,
+              time: item.time
+            }
+          }),
+          pageCount: pageCount
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
   // 热门笔记
   async hotNotes (ctx, next) {
-    let res = await NoteModel.find({}, null, {limit: 8, sort: {read: -1}})
-    ctx.body = {
-      code: 200,
-      message: 'ok',
-      data: res
+    try {
+      let res = await NoteModel.find({}, null, {limit: 8, sort: {read: -1}})
+      ctx.body = {
+        code: 200,
+        message: 'ok',
+        data: res
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
   // 创建笔记
