@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const NoteController = require('../controllers/note_controller')
 const checkToken = require('../middlewares/checkToken')
 
-router.prefix('/v1/notes')
+router.prefix('/v1/api/notes')
 
 router.get('/all', NoteController.allNotes)
 

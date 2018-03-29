@@ -10,6 +10,8 @@ var http = require('http');
 var fs = require('fs');
 var logConfig = require('../config/log_config');
 
+app.env = process.env.NODE_ENV || 'development';
+
 /**
  * Get port from environment and store in Express.
  */

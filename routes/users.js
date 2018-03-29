@@ -3,7 +3,7 @@ const UserController = require('../controllers/user_controller')
 const checkToken = require('../middlewares/checkToken')
 // router.get('/token', checkToken, GetToken)
 
-router.prefix('/v1/users')
+router.prefix('/v1/api/users')
 
 router.get('/', checkToken, UserController.allUsers)
 
