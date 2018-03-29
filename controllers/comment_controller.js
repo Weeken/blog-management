@@ -37,7 +37,9 @@ const CommentController = {
           })
           comment_.userName = user_.name
           comment_.userAvatar = user_.avatar
-          comment_.replyList = replyList
+          comment_.replyList = replyList.filter(reply => {
+            return reply.commentId === comment_._id.toString()
+          })
           return comment_
         })
         ctx.body= {
