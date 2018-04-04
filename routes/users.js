@@ -17,7 +17,7 @@ router.put('/resetPassword/:id', checkToken, UserController.resetPassword)
 
 router.post('/login', UserController.login)
 
-router.post('/admin/login', UserController.adminLogin)
+router.post('/admin/adminLogin', UserController.adminLogin)
 
 router.post('/register', UserController.register)
 
