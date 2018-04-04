@@ -15,7 +15,7 @@ router.get('/admin/noteList', checkAdminToken, NoteController.allNotes)
 
 router.post('/admin/addNotes', checkAdminToken, NoteController.createNote)
 
-router.get('/admin/noteDetails/:id', checkAdminToken, NoteController.noteDetails)
+router.get('/admin/noteDetails/:id', checkAdminToken, NoteController.adminNoteDetails)
 
 router.put('/admin/updateNote/:id', checkAdminToken, NoteController.updateNote)
 

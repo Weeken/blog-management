@@ -78,6 +78,14 @@ const NoteController = {
       data: newNote
     }
   },
+  async adminNoteDetails (ctx, next) {
+    let note = await NoteModel.findById(ctx.params.id)
+    ctx.body = {
+      code: 200,
+      message: 'ok',
+      data: note
+    }
+  },
   // 更新笔记
   async updateNote (ctx, next) {
     let update = {
