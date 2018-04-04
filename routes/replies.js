@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const ReplyController = require('../controllers/reply_controller')
-const checkToken = require('../middlewares/checkToken')
+const checkToken = require('../middlewares/checkUserToken')
 
 router.prefix('/v1/api/replies')
 

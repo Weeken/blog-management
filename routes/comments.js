@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const CommentController = require('../controllers/comment_controller')
-const checkToken = require('../middlewares/checkToken')
+const checkToken = require('../middlewares/checkUserToken')
 
 router.prefix('/v1/api/comments')
 

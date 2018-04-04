@@ -1,5 +1,6 @@
 const UserModel = require('../models/user_model')
-const jwt = require('jsonwebtoken')
+const createUserToken = require('../middlewares/createUserToken')
+const createAdminToken = require('../middlewares/createAdminToken')
 
 const CtxHandler = ctx => {
   if (ctx.body === null || ctx.body.length <= 0) {
@@ -12,13 +13,6 @@ const CtxHandler = ctx => {
       data: ctx.body
     }
   }
-}
-
-const createToken = async user => {
-  let userToken = {name: user.name}
-  let secret = user._id.toString()
-  let token = await jwt.sign(userToken, secret)
-  return token
 }
 
 const UserController = {
@@ -129,7 +123,34 @@ const UserController = {
             name: exist.name,
             type: exist.type,
             avatar: exist.avatar,
-            token: await createToken(exist)
+            token: await createUserToken(exist)
+          }
+        }
+      }
+    } else {
+      ctx.status = 404
+      ctx.body = { message: '找不到用户' }
+    }
+  },
+  // admin登录
+  async adminLogin (ctx, next) {
+    let exist = await UserModel.findOne({email: ctx.request.body.email})
+    if (exist) {
+      if (ctx.request.body.password !== exist.password) {
+        ctx.status = 401
+        ctx.body = { message: '密码不正确' }
+      } else {
+        ctx.status = 200
+        ctx.body = {
+          code: 200,
+          message: '登录成功',
+          data: {
+            id: exist._id,
+            email: exist.email,
+            name: exist.name,
+            type: exist.type,
+            avatar: exist.avatar,
+            token: await createAdminToken(exist)
           }
         }
       }

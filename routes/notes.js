@@ -1,19 +1,24 @@
 const router = require('koa-router')()
 const NoteController = require('../controllers/note_controller')
-const checkToken = require('../middlewares/checkToken')
+const checkToken = require('../middlewares/checkUserToken')
+const checkAdminToken = require('../middlewares/checkAdminToken')
 
 router.prefix('/v1/api/notes')
 
 router.get('/all', NoteController.allNotes)
 
-router.post('/admin/addNotes', NoteController.createNote)
-
 router.get('/hotNotes', NoteController.hotNotes)
 
 router.get('/noteDetails/:id', NoteController.noteDetails)
 
-router.put('/admin/updateNote/:id', NoteController.updateNote)
+router.get('/admin/noteList', checkAdminToken, NoteController.allNotes)
 
-router.delete('/admin/deleteNotes/:id', NoteController.deleteNote)
+router.post('/admin/addNotes', checkAdminToken, NoteController.createNote)
+
+router.get('/admin/noteDetails/:id', checkAdminToken, NoteController.noteDetails)
+
+router.put('/admin/updateNote/:id', checkAdminToken, NoteController.updateNote)
+
+router.delete('/admin/deleteNotes/:id', checkAdminToken, NoteController.deleteNote)
 
 module.exports = router

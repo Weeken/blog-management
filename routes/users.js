@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const UserController = require('../controllers/user_controller')
-const checkToken = require('../middlewares/checkToken')
+const checkToken = require('../middlewares/checkUserToken')
 // router.get('/token', checkToken, GetToken)
 
 router.prefix('/v1/api/users')
@@ -16,6 +16,8 @@ router.put('/changeAvatar/:id', checkToken, UserController.changeAvatar)
 router.put('/resetPassword/:id', checkToken, UserController.resetPassword)
 
 router.post('/login', UserController.login)
+
+router.post('/admin/login', UserController.adminLogin)
 
 router.post('/register', UserController.register)
 
