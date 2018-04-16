@@ -5,9 +5,9 @@ const checkToken = require('../middlewares/checkUserToken')
 
 router.prefix('/v1/api/users')
 
-router.get('/', checkToken, UserController.allUsers)
+router.get('/admin/userList', checkToken, UserController.userList)
 
-router.get('/findUser', checkToken, UserController.findUser)
+router.get('/admin/findUser', checkToken, UserController.findUser)
 
 router.get('/userDetails/:id', checkToken, UserController.userDetails)
 

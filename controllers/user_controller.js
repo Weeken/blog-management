@@ -2,29 +2,64 @@ const UserModel = require('../models/user_model')
 const createUserToken = require('../middlewares/createUserToken')
 const createAdminToken = require('../middlewares/createAdminToken')
 
-const CtxHandler = ctx => {
-  if (ctx.body === null || ctx.body.length <= 0) {
-    ctx.status = 404
-    ctx.body = { message: '找不到用户' }
-  } else {
-    ctx.body = {
-      code: ctx.response.status,
-      message: ctx.response.message,
-      data: ctx.body
-    }
-  }
-}
-
 const UserController = {
   // 所有用户
-  async allUsers (ctx, next) {
-    ctx.body = await UserModel.find()
-    CtxHandler(ctx)
+  async userList (ctx, next) {
+    let limit = 5
+    let page = ctx.request.query.page || 1
+    let count = await UserModel.count()
+    let pageCount
+    if (count <= limit) {
+      pageCount = 1
+    } else {
+      pageCount = count % limit === 0 ? ~~(count / limit) : ~~(count / limit + 1)
+    }
+    let data = await UserModel.find({}, null, {skip: (page - 1) * limit, limit: limit, sort: {time: -1}})
+    if (data === null) {
+      ctx.status = 404
+      ctx.body = { message: '找不到用户' }
+    } else {
+      ctx.body = {
+        code: 200,
+        message: 'ok',
+        data: data,
+        pageCount: pageCount
+      }
+    }
   },
   // 搜索用户
   async findUser (ctx, next) {
-    ctx.body = await UserModel.find(ctx.request.query)
-    CtxHandler(ctx)
+    let limit = 5
+    let page = ctx.request.query.page || 1
+    let options
+    if (ctx.request.query.email && !ctx.request.query.name) {
+      options = {email: ctx.request.query.email}
+    } else if (ctx.request.query.name && !ctx.request.query.email) {
+      options = {name: ctx.request.query.name}
+    } else if (ctx.request.query.name && ctx.request.query.email) {
+      options = {name: ctx.request.query.name, email: ctx.request.query.email}
+    } else {
+      options = {}
+    }
+    let count = await UserModel.count(options)
+    let pageCount
+    if (count <= limit) {
+      pageCount = 1
+    } else {
+      pageCount = count % limit === 0 ? ~~(count / limit) : ~~(count / limit + 1)
+    }
+    let data = await UserModel.find(options, null, {skip: (page - 1) * limit, limit: limit, sort: {time: -1}})
+    if (data === null) {
+      ctx.status = 404
+      ctx.body = { message: '找不到用户' }
+    } else {
+      ctx.body = {
+        code: 200,
+        message: 'ok',
+        data: data,
+        pageCount: pageCount
+      }
+    }
   },
   async userDetails (ctx, next) {
     let user = await UserModel.findById(ctx.params.id)
