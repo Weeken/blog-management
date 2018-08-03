@@ -1,7 +1,7 @@
 {
   "apps": [{
     "name": "weeken",
-    "script": "app.js",
+    "script": "./bin/www",
     "env": {
       "COMMON_VARIABLE": "true"
     },
