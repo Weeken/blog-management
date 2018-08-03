@@ -17,7 +17,7 @@
       "ref": "origin/master",
       "repo": "git@github.com/Weeken/blog-management.git",
       "path": "/www/weeken/production",
-      "ssh_options": "StrictHostKeyChecking=no",
+      "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
       "post-deploy": "npm install --registry=https://registry.npm.taobao.org && pm2 startOrRestart ecosystem.json --env production",
       "env": {
         "NODE_ENV": "production"
