@@ -11,6 +11,7 @@
   }],
   "deploy": {
     "production": {
+      "key": "$HOME/.ssh",
       "user": "ubuntu",
       "host": "139.199.186.160",
       "ref": "origin/master",
